@@ -1,0 +1,13 @@
+# Ignore all node_modules everywhere
+node_modules/
+
+# (Optional, extra safety)
+backend/node_modules/
+frontend/node_modules/
+
+/backend/.env
+.env
+backend/.env
+
+frontend/.env
+/frontend/.env
