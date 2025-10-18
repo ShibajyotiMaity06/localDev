@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const ConnectDB = require('./config/db.js')
 const authRoutes = require('./routes/authRoutes.js')
+const SkillExchangeRoutes = require('./routes/SkillExchangeRoute.js')
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.get('/' , (req , res) => {
 })
 
 app.use('/api/auth' , authRoutes)
+app.use('/api/skill-exchange' , SkillExchangeRoutes)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT , () => 

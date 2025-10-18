@@ -16,15 +16,19 @@ const SkillExchangeSchema = new mongoose.Schema({
         required : true
     },
     description : String,
-    Category : String , enum : ['Coding' , 'Art' , 'Others'], default:'Others',
+    category: {
+  type: String,
+  enum: ['Coding', 'Art', 'Others'],
+  default: 'Others',
+},
     location : String,   // virtual or inperson,
     status: {
     type: String,
-    enum: ['Open',  'Completed'],
+    enum: ['Open', 'In Progress', 'Completed'],
     default: 'Open'
   },
 
 } , {timestamps:true})
 
 
-model.exports = mongoose.model('SkillExchange' , SkillExchangeSchema)
+module.exports = mongoose.model('SkillExchange' , SkillExchangeSchema)

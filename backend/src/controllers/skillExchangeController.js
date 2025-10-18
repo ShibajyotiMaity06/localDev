@@ -2,7 +2,7 @@ const SkillExchange = require('../models/SkillExchange.js')
 const Fuse = require('fuse.js')
 
 // new skill hai re babba
-exports.CreateNewSkill = async (req , res) => {
+exports.createNewSkill = async (req , res) => {
     try {
         const {skillRequired , skillOffered , location , description , category} = req.body;
         const newSkillPost = new SkillExchange({
@@ -48,3 +48,52 @@ exports.getSkillExchanges = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+// notify if requiredlater 
+exports.acceptSkillExchange = async (req, res) => {
+  try {
+    const post = await SkillExchange.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    post.status = 'In Progress';
+    await post.save();
+
+    res.json(post);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+exports.deleteSkill = async (req , res) => {
+  try {
+    const post = await SkillExchange.findByIdAndDelete(req.params.id)
+    if (!post) return res.status(404).json({json:'post not found'})
+    res.json({message : 'post delete chill re'})
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log('problem in post deletion')
+  }
+}
+
+
+exports.updateSkill = async (req , res) => {
+  try {
+    const post = await SkillExchange.findById(req.params.id)
+    if (!post) return res.status(404).json({json:'post not found'})
+    const {skillRequired , skillOffered , location , description , category , status} = req.body;
+  if (skillRequired) post.skillRequired = skillRequired;
+  if (skillOffered) post.skillOffered = skillOffered;
+    if (description) post.description = description;
+    if (location) post.location = location;
+    if (category) post.category = category;
+    if (status && ['Open','In Progress' , 'Completed'].includes(status)) post.status = status;
+
+    await post.save()
+    res.json(post)
+  } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.log('error in update')
+  }
+}
