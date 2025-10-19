@@ -1,7 +1,7 @@
 const ServiceProvider = require('../models/ServiceProvider.js')
 
 // provider profile 
-exports.ProviderProfile = async (req , res) => {
+exports.createProfile = async (req , res) => {
     try {
         const provider = new ServiceProvider({...req.body , userId : req.user._id})
         const saved = await provider.save()
