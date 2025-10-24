@@ -9,6 +9,7 @@ const SkillExchangeRoutes = require('./routes/SkillExchangeRoute.js')
 const providerRoutes = require('./routes/providerRoutes.js');
 const bookingRoutes = require('./routes/bookingRoutes.js');
 const messageRoutes = require('./routes/messageRoutes.js');
+const userDashboardRoutes = require('./routes/userDashboardRoute.js');
 const { initSocket } = require('./utils/socket.js');
 
 const app = express()
@@ -29,6 +30,7 @@ app.use('/api/skill-exchange' , SkillExchangeRoutes)
 app.use('/api/providers', providerRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/user', userDashboardRoutes);
 
 
 const server = http.createServer(app);
