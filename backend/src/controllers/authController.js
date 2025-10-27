@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
     try {
         const user = await User.findOne({ email })
         if (!user) {
-            res.status(400).json({ message: 'no user with this email signup' })
+            return res.status(400).json({ message: 'no user with this email signup' })
         }
 
         if (await user.matchPassword(password)) {

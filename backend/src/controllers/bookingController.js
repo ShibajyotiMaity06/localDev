@@ -17,8 +17,6 @@ exports.createBooking = async (req , res) => {
     }
 }
 
-
-// Get bookings for user/provider
 exports.getBookings = async (req, res) => {
   try {
     const { role } = req.query;
@@ -30,14 +28,12 @@ exports.getBookings = async (req, res) => {
   }
 };
 
-
-// Update booking status
 exports.updateBookingStatus = async (req, res) => {
   try {
     const booking = await Booking.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!booking) return res.status(404).json({ message: 'Booking not found' });
 
-    sendNotification(booking.UserId, `Your booking status updated to ${booking.status}`);
+    sendNotification(booking.userId, `Your booking status updated to ${booking.status}`);
 
     sendNotification(booking.providerId, `Booking status changed to ${booking.status}`);
 

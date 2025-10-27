@@ -38,7 +38,7 @@ initSocket(server);
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT , () => 
+server.listen(PORT , () => 
     console.log(`its is running in ${PORT} `)
 )
 

@@ -1,6 +1,5 @@
 const Message = require('../models/Message.js')
 
-//sand massage
 exports.sendMessage = async (req , res) => {
     try {
         const message = new Message({
@@ -20,8 +19,6 @@ exports.sendMessage = async (req , res) => {
     }
 }
 
-
-// Get messages between two users
 exports.getMessages = async (req, res) => {
   try {
     const { receiverId } = req.params;
