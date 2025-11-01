@@ -18,12 +18,12 @@ exports.createNewSkill = async (req , res) => {
         res.status(201).json({savedPost})
     } catch (error) {
         res.status(500).json({ message: error.message });
+        console.log(error)
         console.log('new skill creation me error')
     }
 }
 
 
-// Get skillxchanges with fuzzy search , filters aisa kuch
 exports.getSkillExchanges = async (req, res) => {
   try {
     const { category, status, search } = req.query;
@@ -32,10 +32,11 @@ exports.getSkillExchanges = async (req, res) => {
     if (category) query.category = category;
     if (status) query.status = status;
 
-    let posts = await SkillExchange.find(query).populate('userId', 'name');
+    let posts = await SkillExchange.find(query).populate('userId', 'name').populate('acceptedBy', 'name');
 
-    if (search) {
-      // Fuse.js fuzzy search on skillRequired
+
+    // Only run Fuse if search is a non-empty string
+    if (search && search.trim()) {
       const fuse = new Fuse(posts, {
         keys: ['skillRequired'],
         threshold: 0.4
@@ -45,25 +46,51 @@ exports.getSkillExchanges = async (req, res) => {
 
     res.json(posts);
   } catch (err) {
+    console.log(err)
     res.status(500).json({ message: err.message });
   }
 };
 
 
-// notify if requiredlater 
 exports.acceptSkillExchange = async (req, res) => {
   try {
     const post = await SkillExchange.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
-
+    if (post.status !== 'Open') return res.status(400).json({ message: 'Already accepted or completed' });
     post.status = 'In Progress';
+    post.acceptedBy = req.user._id;
     await post.save();
+    res.json(post);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+    console.log(err)
+  }
+};
 
+
+exports.completeSkillExchange = async (req, res) => {
+  try {
+    const post = await SkillExchange.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+    if (post.status !== 'In Progress') return res.status(400).json({ message: 'Can only complete In Progress' });
+
+    if (
+      !post.userId.equals(req.user._id) &&
+      !post.acceptedBy.equals(req.user._id)
+    ) {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    post.status = 'Completed';
+    await post.save();
     res.json(post);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+
 
 
 exports.deleteSkill = async (req , res) => {

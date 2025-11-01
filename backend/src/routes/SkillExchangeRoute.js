@@ -8,5 +8,7 @@ router.get('/', SkillExchangeController.getSkillExchanges);
 router.put('/:id/accept', authMiddleware, SkillExchangeController.acceptSkillExchange);
 router.put('/:id', authMiddleware, SkillExchangeController.updateSkill);
 router.delete('/:id', authMiddleware, SkillExchangeController.deleteSkill);
+router.put('/:id/complete', authMiddleware, SkillExchangeController.completeSkillExchange);
+
 
 module.exports = router;

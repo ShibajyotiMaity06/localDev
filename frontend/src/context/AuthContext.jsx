@@ -1,12 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { VerifyToken } from "../services/authService.js";
-import io from "socket.io-client";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -17,21 +15,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // initialize socket once user is known
-  useEffect(() => {
-    if (user?._id) {
-      const s = io(import.meta.env.VITE_BACKEND_URL);
-      s.emit("join", user._id);
-      setSocket(s);
-
-      s.on("notification", (payload) => {
-        console.log("🔔 Notification:", payload.message);
-        // optional: integrate toast or alert UI here
-      });
-
-      return () => s.disconnect();
-    }
-  }, [user]);
 
   const login = (token, userData) => {
     localStorage.setItem("token", token);
@@ -41,12 +24,11 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    socket?.disconnect();
-    setSocket(null);
+    
   };
 
   return (
-    <AuthContext.Provider value={{ user, socket, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

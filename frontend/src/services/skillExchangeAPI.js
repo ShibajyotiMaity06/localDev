@@ -21,6 +21,18 @@ export async function createNewSkill(data, token) {
   return res.json();
 }
 
+export async function completeSkillExchange(id, token) {
+  const res = await fetch(`http://localhost:5000/api/skill-exchange/${id}/complete`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  if (!res.ok) throw new Error('Failed to complete skill exchange');
+  return res.json();
+}
+
+
 export async function acceptSkillExchange(id, token) {
   const res = await fetch(`${API_BASE}/${id}/accept`, {
     method: 'PUT',
