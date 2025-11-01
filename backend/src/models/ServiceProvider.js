@@ -16,13 +16,13 @@ const ServiceProviderSchema = new mongoose.Schema({
     },
     phone : {
         type : String ,
-        requred : true
+        required : true
     },
     hourlyRate : {
         type : Number,
         required : true
     },
-    Rating : {
+    rating : {
         type : Number,
         default : 0
     },
@@ -35,6 +35,6 @@ const ServiceProviderSchema = new mongoose.Schema({
         available : {type : Boolean , default : true}}
     ]
  , },
-{timeStamps :true})
+{timestamps :true})
 
 module.exports = mongoose.model('ServiceProvider' , ServiceProviderSchema)

@@ -21,7 +21,7 @@ const messageSchema = new mongoose.Schema({
     required: true,
     enum: ['User', 'ServiceProvider']
   },
-  message: { type: String, required: true },
+  content: { type: String, required: true },
   timestamp: { type: Date, default: Date.now }
 });
 

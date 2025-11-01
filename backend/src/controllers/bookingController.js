@@ -6,6 +6,10 @@ const {sendNotification} = require('../utils/notification.js')
 exports.createBooking = async (req , res) => {
     try {
         const booking = new Booking({...req.body , userId : req.user._id})
+
+        const existing = await Booking.findOne({ providerId: req.body.providerId, date: req.body.date, timeSlot: req.body.timeSlot });
+if (existing) return res.status(400).json({ message: 'Slot already booked' });
+
         const savedBooking = await booking.save()
 
         sendNotification(booking.providerId , `new booking req from ${req.user._id}`)

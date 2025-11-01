@@ -1,19 +1,23 @@
-import React from "react";
+import RatingStars from './RatingStars';
+import Button from './UI/Button';
 
-export default function ProviderCard({ provider, onSelect }) {
+export default function ProviderCard({ provider, onBook }) {
   return (
-    <div className="border rounded p-4 shadow cursor-pointer hover:shadow-lg" onClick={() => onSelect(provider)}>
-      <img
-        src={provider.profilePic || '/default-avatar.png'}
-        alt={provider.name}
-        className="w-16 h-16 rounded-full mb-2"
-      />
-      <h3 className="text-lg font-semibold text-teal-600">{provider.name}</h3>
-      <p className="text-sm text-gray-600">{provider.profession}</p>
-      <p className="text-yellow-500">Rating: {provider.Rating?.toFixed(1) || 'N/A'}</p>
-      <p>Hourly Rate: ₹{provider.hourlyRate}</p>
-      <p>Status: {provider.status}</p>
-      <p className="text-sm truncate">{provider.bio}</p>
+    <div className="border p-4 rounded-xl shadow hover:shadow-md transition bg-white flex flex-col justify-between">
+      <div>
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-semibold">{provider.name}</h3>
+          <span className="text-sm text-gray-500">{provider.profession}</span>
+        </div>
+        <p className="text-gray-600 mt-1 text-sm">{provider.bio || 'No bio provided.'}</p>
+        <div className="mt-2 flex items-center justify-between">
+          <RatingStars rating={provider.rating || 0} />
+          <span className="text-blue-600 font-semibold">₹{provider.hourlyRate}/hr</span>
+        </div>
+      </div>
+      <div className="mt-3">
+        <Button onClick={() => onBook(provider)}>Book Now</Button>
+      </div>
     </div>
   );
 }
